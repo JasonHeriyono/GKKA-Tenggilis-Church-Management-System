@@ -1,0 +1,18 @@
+# Binary & build
+/bin/
+/tmp/
+*.exe
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Key Google service account
+service-account.json

@@ -1,0 +1,13 @@
+-- +goose Up
+CREATE TABLE role (
+    id_role INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nama_role VARCHAR(50) NOT NULL,
+    deskripsi TEXT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME NULL,
+    UNIQUE KEY uk_role_nama (nama_role)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- +goose Down
+DROP TABLE IF EXISTS role;

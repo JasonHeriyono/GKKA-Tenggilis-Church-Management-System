@@ -1,0 +1,2381 @@
+basePath: /gkki/api
+definitions:
+  auth.LoginRequest:
+    properties:
+      identifier:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 72
+        type: string
+    required:
+    - identifier
+    - password
+    type: object
+  auth.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  debuginfo.Catatan:
+    properties:
+      error:
+        type: string
+      queries:
+        items:
+          $ref: '#/definitions/debuginfo.Query'
+        type: array
+      request_id:
+        type: string
+    type: object
+  debuginfo.Query:
+    properties:
+      durasi_ms:
+        type: number
+      error:
+        type: string
+      rows:
+        type: integer
+      sql:
+        type: string
+    type: object
+  evaluation.AktifRequest:
+    properties:
+      is_aktif:
+        type: boolean
+    required:
+    - is_aktif
+    type: object
+  evaluation.JadwalKuesionerRequest:
+    properties:
+      dibuka_pada:
+        type: string
+      ditutup_pada:
+        type: string
+      status:
+        enum:
+        - BUKA
+        - TUTUP
+        type: string
+    type: object
+  evaluation.KuesionerRequest:
+    properties:
+      dibuka_pada:
+        description: kosong (MINGGUAN) = saat kegiatan selesai
+        type: string
+      ditutup_pada:
+        description: kosong (MINGGUAN) = H+N pukul 23.59
+        type: string
+      id_kegiatan:
+        type: integer
+      jenis_kuesioner:
+        enum:
+        - MINGGUAN
+        - TAHUNAN
+        type: string
+      tahun:
+        maximum: 2100
+        minimum: 2000
+        type: integer
+    required:
+    - jenis_kuesioner
+    type: object
+  evaluation.PertanyaanRequest:
+    properties:
+      jenis_kuesioner:
+        enum:
+        - MINGGUAN
+        - TAHUNAN
+        type: string
+      opsi:
+        description: dive ini untuk validasi item di dalam array
+        items:
+          type: string
+        type: array
+      teks_pertanyaan:
+        type: string
+      tipe_jawaban:
+        enum:
+        - RATING
+        - TEKS_SINGKAT
+        - PILIHAN_GANDA
+        - CENTANG
+        - DROPDOWN
+        - PARAGRAF
+        type: string
+      urutan:
+        description: Urutan minimal dari 1
+        minimum: 1
+        type: integer
+      wajib:
+        type: boolean
+    required:
+    - jenis_kuesioner
+    - teks_pertanyaan
+    - tipe_jawaban
+    type: object
+  evaluation.UpdateHeaderRequest:
+    properties:
+      deskripsi:
+        type: string
+      jenis_kuesioner:
+        type: string
+      judul:
+        type: string
+    required:
+    - jenis_kuesioner
+    - judul
+    type: object
+  group.AnggotaRequest:
+    properties:
+      id_user:
+        type: integer
+      is_ketua:
+        type: boolean
+    required:
+    - id_user
+    type: object
+  group.KetuaRequest:
+    properties:
+      is_ketua:
+        type: boolean
+    required:
+    - is_ketua
+    type: object
+  group.SaveRequest:
+    properties:
+      deskripsi:
+        maxLength: 1000
+        type: string
+      nama:
+        maxLength: 100
+        type: string
+    required:
+    - nama
+    type: object
+  pendaftaran.DaftarRequest:
+    properties:
+      alamat:
+        maxLength: 500
+        type: string
+      data_tambahan:
+        additionalProperties: {}
+        type: object
+      email:
+        maxLength: 100
+        type: string
+      gereja_asal:
+        description: jika pindahan (atestasi)
+        maxLength: 150
+        type: string
+      gereja_baptis:
+        maxLength: 150
+        type: string
+      gereja_sidi:
+        maxLength: 150
+        type: string
+      jenis_kelamin:
+        enum:
+        - L
+        - P
+        type: string
+      keahlian:
+        items:
+          type: integer
+        maxItems: 20
+        type: array
+      kota:
+        maxLength: 100
+        type: string
+      nama:
+        maxLength: 100
+        type: string
+      nama_ayah:
+        maxLength: 100
+        type: string
+      nama_ibu:
+        maxLength: 100
+        type: string
+      nama_panggilan:
+        maxLength: 50
+        type: string
+      no_telepon:
+        maxLength: 20
+        type: string
+      password:
+        maxLength: 72
+        minLength: 8
+        type: string
+      pekerjaan:
+        maxLength: 100
+        type: string
+      pendidikan_terakhir:
+        enum:
+        - SD
+        - SMP
+        - SMA
+        - D3
+        - S1
+        - S2
+        - S3
+        type: string
+      persetujuan_data:
+        type: boolean
+      status_keanggotaan:
+        enum:
+        - SIMPATISAN
+        - ANGGOTA_BAPTIS
+        - ANGGOTA_SIDI
+        type: string
+      status_pernikahan:
+        enum:
+        - BELUM_KAWIN
+        - KAWIN
+        - CERAI_HIDUP
+        - CERAI_MATI
+        type: string
+      tanggal_baptis:
+        type: string
+      tanggal_lahir:
+        type: string
+      tanggal_pernikahan:
+        type: string
+      tanggal_sidi:
+        type: string
+      tempat_lahir:
+        maxLength: 100
+        type: string
+    required:
+    - nama
+    - persetujuan_data
+    type: object
+  pendaftaran.DuplikatRequest:
+    properties:
+      catatan_admin:
+        maxLength: 500
+        type: string
+      id_user:
+        type: integer
+    required:
+    - id_user
+    type: object
+  pendaftaran.SetujuiRequest:
+    properties:
+      catatan_admin:
+        maxLength: 500
+        type: string
+    type: object
+  pendaftaran.SignupRequest:
+    properties:
+      alamat:
+        maxLength: 500
+        type: string
+      data_tambahan:
+        additionalProperties: {}
+        type: object
+      email:
+        maxLength: 100
+        type: string
+      gereja_asal:
+        description: jika pindahan (atestasi)
+        maxLength: 150
+        type: string
+      gereja_baptis:
+        maxLength: 150
+        type: string
+      gereja_sidi:
+        maxLength: 150
+        type: string
+      jenis_kelamin:
+        enum:
+        - L
+        - P
+        type: string
+      keahlian:
+        items:
+          type: integer
+        maxItems: 20
+        type: array
+      kode_jemaat:
+        maxLength: 20
+        type: string
+      kota:
+        maxLength: 100
+        type: string
+      nama:
+        maxLength: 100
+        type: string
+      nama_ayah:
+        maxLength: 100
+        type: string
+      nama_ibu:
+        maxLength: 100
+        type: string
+      nama_panggilan:
+        maxLength: 50
+        type: string
+      no_telepon:
+        maxLength: 20
+        type: string
+      password:
+        maxLength: 72
+        minLength: 8
+        type: string
+      pekerjaan:
+        maxLength: 100
+        type: string
+      pendidikan_terakhir:
+        enum:
+        - SD
+        - SMP
+        - SMA
+        - D3
+        - S1
+        - S2
+        - S3
+        type: string
+      persetujuan_data:
+        description: consent UU PDP, harus true
+        type: boolean
+      status_keanggotaan:
+        enum:
+        - SIMPATISAN
+        - ANGGOTA_BAPTIS
+        - ANGGOTA_SIDI
+        type: string
+      status_pernikahan:
+        enum:
+        - BELUM_KAWIN
+        - KAWIN
+        - CERAI_HIDUP
+        - CERAI_MATI
+        type: string
+      tanggal_baptis:
+        type: string
+      tanggal_lahir:
+        type: string
+      tanggal_pernikahan:
+        type: string
+      tanggal_sidi:
+        type: string
+      tempat_lahir:
+        maxLength: 100
+        type: string
+    required:
+    - nama
+    - password
+    - persetujuan_data
+    type: object
+  pendaftaran.TolakRequest:
+    properties:
+      catatan_admin:
+        maxLength: 500
+        type: string
+    required:
+    - catatan_admin
+    type: object
+  response.Body:
+    properties:
+      data: {}
+      debug:
+        $ref: '#/definitions/debuginfo.Catatan'
+      errors:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  schedule.KegiatanRequest:
+    properties:
+      deskripsi:
+        type: string
+      id_komunitas:
+        description: kosong = kegiatan umum
+        type: integer
+      lokasi:
+        maxLength: 150
+        type: string
+      nama_kegiatan:
+        maxLength: 150
+        type: string
+      nats_alkitab:
+        maxLength: 100
+        type: string
+      pembicara:
+        maxLength: 100
+        type: string
+      perlu_evaluasi:
+        type: boolean
+      tanggal:
+        description: contoh "2026-11-01"
+        type: string
+      tema:
+        maxLength: 255
+        type: string
+      waktu_mulai:
+        description: contoh "07:00"
+        type: string
+      waktu_selesai:
+        description: boleh kosong
+        type: string
+    required:
+    - nama_kegiatan
+    - tanggal
+    - waktu_mulai
+    type: object
+  schedule.PenugasanRequest:
+    properties:
+      id_keahlian:
+        type: integer
+      id_user:
+        type: integer
+    required:
+    - id_keahlian
+    - id_user
+    type: object
+  skill.JemaatRequest:
+    properties:
+      id_user:
+        type: integer
+    required:
+    - id_user
+    type: object
+  skill.ReplaceRequest:
+    properties:
+      id_keahlian:
+        items:
+          type: integer
+        maxItems: 50
+        type: array
+    required:
+    - id_keahlian
+    type: object
+  skill.SaveRequest:
+    properties:
+      nama:
+        maxLength: 100
+        type: string
+    required:
+    - nama
+    type: object
+  user.CreateRequest:
+    properties:
+      alamat:
+        maxLength: 500
+        type: string
+      email:
+        maxLength: 100
+        type: string
+      jenis_kelamin:
+        enum:
+        - L
+        - P
+        type: string
+      kode_jemaat:
+        maxLength: 20
+        type: string
+      nama:
+        maxLength: 100
+        type: string
+      no_telepon:
+        maxLength: 20
+        type: string
+      password:
+        maxLength: 72
+        minLength: 8
+        type: string
+      role:
+        enum:
+        - Jemaat
+        - Majelis
+        - Super Admin
+        type: string
+      tanggal_lahir:
+        type: string
+    required:
+    - kode_jemaat
+    - nama
+    - role
+    type: object
+  user.PasswordRequest:
+    properties:
+      password:
+        maxLength: 72
+        minLength: 8
+        type: string
+    required:
+    - password
+    type: object
+  user.RoleRequest:
+    properties:
+      role:
+        enum:
+        - Jemaat
+        - Majelis
+        - Super Admin
+        type: string
+    required:
+    - role
+    type: object
+  user.StatusRequest:
+    properties:
+      is_aktif:
+        type: boolean
+    required:
+    - is_aktif
+    type: object
+info:
+  contact: {}
+  description: Dokumentasi API backend SIM-G
+  title: SIM-G API
+  version: "1.0"
+paths:
+  /auth/daftar:
+    post:
+      consumes:
+      - application/json
+      description: Untuk orang yang BELUM TERDATA. User dan profil dibuat saat Super
+        Admin menyetujui. Password boleh kosong untuk jemaat tanpa akun login (mis.
+        anak).
+      parameters:
+      - description: Data pendaftaran
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/pendaftaran.DaftarRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Daftar jadi jemaat baru
+      tags:
+      - pendaftaran
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Kredensial
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Login dengan email, kode jemaat, atau no. telepon
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Refresh token
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Logout (cabut refresh token)
+      tags:
+      - auth
+  /auth/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Profil user yang sedang login
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Refresh token
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Tukar refresh token dengan token baru (rotasi)
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Untuk jemaat yang SUDAH TERDATA di gereja. Dicocokkan lewat kode
+        jemaat, email, atau no. telepon (minimal salah satu) dan nama. Akun aktif
+        setelah disetujui Super Admin.
+      parameters:
+      - description: Data signup
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/pendaftaran.SignupRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Signup jemaat yang sudah terdata (aktivasi akun)
+      tags:
+      - pendaftaran
+  /evaluasi/form:
+    get:
+      parameters:
+      - description: MINGGUAN | TAHUNAN
+        in: query
+        name: jenis
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/response.Body'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Link Google Form evaluasi untuk jemaat dan tamu (publik)
+      tags:
+      - evaluasi
+  /jadwal/saya:
+    get:
+      parameters:
+      - description: Tanggal awal, contoh 2026-11-01
+        in: query
+        name: dari
+        type: string
+      - description: Tanggal akhir, contoh 2026-11-30
+        in: query
+        name: sampai
+        type: string
+      - description: Halaman (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Jumlah per halaman (default 20, maks 100)
+        in: query
+        name: limit
+        type: integer
+      - description: tanggal, awali - untuk DESC
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tugas pelayanan milik saya
+      tags:
+      - jadwal
+  /keahlian:
+    get:
+      parameters:
+      - description: Halaman (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Jumlah per halaman (default 20, maks 100)
+        in: query
+        name: limit
+        type: integer
+      - description: nama_keahlian | created_at, awali - untuk DESC
+        in: query
+        name: sort
+        type: string
+      - description: Cari nama keahlian
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Daftar keahlian (publik, dipakai form signup)
+      tags:
+      - keahlian
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data keahlian
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/skill.SaveRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tambah keahlian (Super Admin)
+      tags:
+      - keahlian
+  /keahlian/{id}:
+    delete:
+      parameters:
+      - description: ID keahlian
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Hapus keahlian (soft delete; Super Admin)
+      tags:
+      - keahlian
+    get:
+      parameters:
+      - description: ID keahlian
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Detail keahlian beserta jemaat pemiliknya (Super Admin)
+      tags:
+      - keahlian
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID keahlian
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Data keahlian
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/skill.SaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah nama keahlian (Super Admin; keahlian sistem tidak bisa diubah)
+      tags:
+      - keahlian
+  /keahlian/{id}/jemaat:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID keahlian
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Jemaat
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/skill.JemaatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Beri keahlian ke satu jemaat (Super Admin)
+      tags:
+      - keahlian
+  /keahlian/{id}/jemaat/{userId}:
+    delete:
+      parameters:
+      - description: ID keahlian
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID user
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Lepas keahlian dari satu jemaat (Super Admin)
+      tags:
+      - keahlian
+  /kegiatan:
+    get:
+      parameters:
+      - description: Tanggal awal, contoh 2026-11-01
+        in: query
+        name: dari
+        type: string
+      - description: Tanggal akhir, contoh 2026-11-30
+        in: query
+        name: sampai
+        type: string
+      - description: Cari nama kegiatan
+        in: query
+        name: q
+        type: string
+      - description: Halaman (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Jumlah per halaman (default 20, maks 100)
+        in: query
+        name: limit
+        type: integer
+      - description: tanggal | nama_kegiatan | created_at, awali - untuk DESC
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Daftar kegiatan (publik)
+      tags:
+      - kegiatan
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data kegiatan
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schedule.KegiatanRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tambah kegiatan (Super Admin)
+      tags:
+      - kegiatan
+  /kegiatan/{id}:
+    delete:
+      parameters:
+      - description: ID kegiatan
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Hapus kegiatan (Super Admin)
+      tags:
+      - kegiatan
+    get:
+      parameters:
+      - description: ID kegiatan
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Detail kegiatan (publik)
+      tags:
+      - kegiatan
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID kegiatan
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Data kegiatan
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schedule.KegiatanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah kegiatan (Super Admin)
+      tags:
+      - kegiatan
+  /kegiatan/{id}/petugas:
+    get:
+      parameters:
+      - description: ID kegiatan
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Daftar petugas satu kegiatan (Super Admin)
+      tags:
+      - kegiatan
+    post:
+      consumes:
+      - application/json
+      description: Jemaat harus aktif dan punya keahlian itu (sudah diverifikasi).
+        Bentrok waktu hanya jadi peringatan di field peringatan.
+      parameters:
+      - description: ID kegiatan
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Jemaat dan keahlian
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schedule.PenugasanRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tugaskan jemaat ke kegiatan (Super Admin)
+      tags:
+      - kegiatan
+  /kegiatan/{id}/petugas/{id_penjadwalan}:
+    delete:
+      parameters:
+      - description: ID kegiatan
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID penugasan
+        in: path
+        name: id_penjadwalan
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Batalkan penugasan petugas (Super Admin)
+      tags:
+      - kegiatan
+  /komunitas:
+    get:
+      parameters:
+      - description: Halaman (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Jumlah per halaman (default 20, maks 100)
+        in: query
+        name: limit
+        type: integer
+      - description: nama_komunitas | created_at, awali - untuk DESC
+        in: query
+        name: sort
+        type: string
+      - description: Cari nama komunitas
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      summary: Daftar komunitas (publik)
+      tags:
+      - komunitas
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data komunitas
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/group.SaveRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tambah komunitas (Super Admin)
+      tags:
+      - komunitas
+  /komunitas/{id}:
+    delete:
+      parameters:
+      - description: ID komunitas
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Hapus komunitas (Super Admin)
+      tags:
+      - komunitas
+    get:
+      parameters:
+      - description: ID komunitas
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Detail komunitas beserta anggota (Super Admin)
+      tags:
+      - komunitas
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID komunitas
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Data komunitas
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/group.SaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah komunitas (Super Admin)
+      tags:
+      - komunitas
+  /komunitas/{id}/anggota:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID komunitas
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Anggota
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/group.AnggotaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tambah anggota komunitas (Super Admin)
+      tags:
+      - komunitas
+  /komunitas/{id}/anggota/{userId}:
+    delete:
+      parameters:
+      - description: ID komunitas
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID user
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Keluarkan anggota dari komunitas (Super Admin)
+      tags:
+      - komunitas
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID komunitas
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID user
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Status ketua
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/group.KetuaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Jadikan / batalkan ketua komunitas (Super Admin)
+      tags:
+      - komunitas
+  /kuesioner:
+    get:
+      parameters:
+      - description: MINGGUAN | TAHUNAN
+        in: query
+        name: jenis
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Daftar jadwal kuesioner evaluasi, terbaru di atas (Super Admin)
+      tags:
+      - kuesioner
+    post:
+      consumes:
+      - application/json
+      description: 'MINGGUAN: id_kegiatan wajib; jadwal kosong = dibuka saat kegiatan
+        selesai (00:00 kalau jam selesai kosong), ditutup H+2 23.59. TAHUNAN: tahun
+        dan jadwal wajib. Format jam: "2026-11-01 10:30:00".'
+      parameters:
+      - description: Data kuesioner
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation.KuesionerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Buat jadwal kuesioner evaluasi (Super Admin)
+      tags:
+      - kuesioner
+  /kuesioner/{id}/jadwal:
+    put:
+      consumes:
+      - application/json
+      description: status BUKA = buka sekarang, TUTUP = tutup sekarang. Atau isi dibuka_pada
+        / ditutup_pada ("2026-11-01 10:30:00"); yang tidak dikirim tetap jam lama.
+      parameters:
+      - description: ID kuesioner
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Jadwal baru
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation.JadwalKuesionerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah jam buka/tutup kuesioner evaluasi (Super Admin)
+      tags:
+      - kuesioner
+  /pendaftaran:
+    get:
+      parameters:
+      - description: Halaman (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Jumlah per halaman (default 20, maks 100)
+        in: query
+        name: limit
+        type: integer
+      - description: created_at | status, awali - untuk DESC
+        in: query
+        name: sort
+        type: string
+      - description: MENUNGGU | DISETUJUI | DITOLAK | DUPLIKAT
+        in: query
+        name: status
+        type: string
+      - description: JEMAAT_LAMA | BARU
+        in: query
+        name: jenis
+        type: string
+      - description: Cari nama atau email
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Daftar pendaftaran (Super Admin)
+      tags:
+      - pendaftaran
+  /pendaftaran/{id}:
+    get:
+      parameters:
+      - description: ID pendaftaran
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Detail pendaftaran beserta isian lengkap (Super Admin)
+      tags:
+      - pendaftaran
+  /pendaftaran/{id}/duplikat:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID pendaftaran
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Jemaat yang sudah ada
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/pendaftaran.DuplikatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tandai pendaftaran sebagai duplikat jemaat yang sudah ada (Super Admin)
+      tags:
+      - pendaftaran
+  /pendaftaran/{id}/setujui:
+    post:
+      consumes:
+      - application/json
+      description: 'JEMAAT_LAMA: akun jemaat diaktifkan dengan password dari formulir.
+        BARU: user dan profil dibuat, kode jemaat otomatis.'
+      parameters:
+      - description: ID pendaftaran
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Catatan
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/pendaftaran.SetujuiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Setujui pendaftaran (Super Admin)
+      tags:
+      - pendaftaran
+  /pendaftaran/{id}/tolak:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID pendaftaran
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Alasan penolakan
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/pendaftaran.TolakRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tolak pendaftaran (Super Admin)
+      tags:
+      - pendaftaran
+  /pertanyaan:
+    get:
+      parameters:
+      - description: MINGGUAN | TAHUNAN
+        in: query
+        name: jenis
+        type: string
+      - description: true = hanya yang aktif, false = hanya yang nonaktif
+        in: query
+        name: aktif
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Daftar pertanyaan evaluasi (Majelis, Super Admin)
+      tags:
+      - pertanyaan
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data pertanyaan
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation.PertanyaanRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Tambah pertanyaan evaluasi (Super Admin)
+      tags:
+      - pertanyaan
+  /pertanyaan/{id}:
+    delete:
+      parameters:
+      - description: ID pertanyaan
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Hapus pertanyaan evaluasi (Super Admin)
+      tags:
+      - pertanyaan
+    get:
+      parameters:
+      - description: ID pertanyaan
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Detail pertanyaan beserta opsi (Majelis, Super Admin)
+      tags:
+      - pertanyaan
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID pertanyaan
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Data pertanyaan
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation.PertanyaanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah pertanyaan evaluasi (Super Admin)
+      tags:
+      - pertanyaan
+  /pertanyaan/{id}/aktif:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID pertanyaan
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status aktif
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation.AktifRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Aktifkan / nonaktifkan pertanyaan (Super Admin)
+      tags:
+      - pertanyaan
+  /pertanyaan/gform:
+    post:
+      parameters:
+      - description: MINGGUAN | TAHUNAN
+        in: query
+        name: jenis
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/response.Body'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Samakan pertanyaan aktif ke Google Form (Super Admin)
+      tags:
+      - pertanyaan
+  /pertanyaan/header:
+    get:
+      parameters:
+      - description: MINGGUAN | TAHUNAN
+        in: query
+        name: jenis
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Template header form evaluasi (Super Admin)
+      tags:
+      - pertanyaan
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data header form
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation.UpdateHeaderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah header form evaluasi (Super Admin)
+      tags:
+      - pertanyaan
+  /pertanyaan/import:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 'Ganti set pertanyaan untuk jenis yang ada di file: pertanyaan
+        sama dipakai ulang, yang baru dibuat, yang tidak ada di file dinonaktifkan.
+        Semua atau tidak sama sekali.'
+      parameters:
+      - description: Template pertanyaan (.xlsx), maks 5 MB
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Simpan import pertanyaan dari template Excel (Super Admin)
+      tags:
+      - pertanyaan
+  /pertanyaan/import/preview:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Cek isi sheet "Pertanyaan" per baris dan tunjukkan pertanyaan yang
+        BARU, SAMA (dipakai ulang), dan yang akan dinonaktifkan. Tidak menyimpan data.
+      parameters:
+      - description: Template pertanyaan (.xlsx), maks 5 MB
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Preview import pertanyaan dari template Excel (Super Admin)
+      tags:
+      - pertanyaan
+  /schedules/import:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Template Excel (.xlsx), maks 5 MB
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Simpan import jadwal kegiatan (Super Admin)
+      tags:
+      - schedule
+  /schedules/import/preview:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Memvalidasi file per baris dan mendeteksi bentrok waktu. Tidak
+        menyimpan data.
+      parameters:
+      - description: Template Excel (.xlsx), maks 5 MB
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Body'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Preview import jadwal dari template Excel
+      tags:
+      - schedule
+  /users:
+    get:
+      parameters:
+      - description: Halaman (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Jumlah per halaman (default 20, maks 100)
+        in: query
+        name: limit
+        type: integer
+      - description: nama | kode_jemaat | created_at, awali - untuk DESC
+        in: query
+        name: sort
+        type: string
+      - description: Cari nama, kode jemaat, atau email
+        in: query
+        name: q
+        type: string
+      - description: Filter role
+        in: query
+        name: role
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Daftar user (Super Admin)
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data user
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Daftarkan akun jemaat (Super Admin)
+      tags:
+      - user
+  /users/{id}:
+    get:
+      parameters:
+      - description: ID user
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Detail user (Super Admin)
+      tags:
+      - user
+  /users/{id}/keahlian:
+    get:
+      parameters:
+      - description: ID user
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Keahlian milik satu jemaat (Super Admin)
+      tags:
+      - keahlian
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID user
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Daftar id keahlian (kosong = lepas semua)
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/skill.ReplaceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ganti seluruh keahlian satu jemaat (Super Admin)
+      tags:
+      - keahlian
+  /users/{id}/password:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID user
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Password baru
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.PasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Atur password user dan cabut semua sesinya (Super Admin)
+      tags:
+      - user
+  /users/{id}/role:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID user
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Role baru
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.RoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Ubah role user (Super Admin)
+      tags:
+      - user
+  /users/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID user
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.StatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Body'
+      security:
+      - BearerAuth: []
+      summary: Aktifkan / nonaktifkan akun (Super Admin)
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    description: 'Isi dengan: Bearer <access_token>'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

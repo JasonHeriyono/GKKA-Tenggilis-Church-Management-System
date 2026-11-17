@@ -1,0 +1,3659 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Dokumentasi API backend SIM-G",
+        "title": "SIM-G API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/gkki/api",
+    "paths": {
+        "/auth/daftar": {
+            "post": {
+                "description": "Untuk orang yang BELUM TERDATA. User dan profil dibuat saat Super Admin menyetujui. Password boleh kosong untuk jemaat tanpa akun login (mis. anak).",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Daftar jadi jemaat baru",
+                "parameters": [
+                    {
+                        "description": "Data pendaftaran",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pendaftaran.DaftarRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login dengan email, kode jemaat, atau no. telepon",
+                "parameters": [
+                    {
+                        "description": "Kredensial",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout (cabut refresh token)",
+                "parameters": [
+                    {
+                        "description": "Refresh token",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.RefreshRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Profil user yang sedang login",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Tukar refresh token dengan token baru (rotasi)",
+                "parameters": [
+                    {
+                        "description": "Refresh token",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.RefreshRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "description": "Untuk jemaat yang SUDAH TERDATA di gereja. Dicocokkan lewat kode jemaat, email, atau no. telepon (minimal salah satu) dan nama. Akun aktif setelah disetujui Super Admin.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Signup jemaat yang sudah terdata (aktivasi akun)",
+                "parameters": [
+                    {
+                        "description": "Data signup",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pendaftaran.SignupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/evaluasi/form": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "evaluasi"
+                ],
+                "summary": "Link Google Form evaluasi untuk jemaat dan tamu (publik)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MINGGUAN | TAHUNAN",
+                        "name": "jenis",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/jadwal/saya": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jadwal"
+                ],
+                "summary": "Tugas pelayanan milik saya",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tanggal awal, contoh 2026-11-01",
+                        "name": "dari",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tanggal akhir, contoh 2026-11-30",
+                        "name": "sampai",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Halaman (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Jumlah per halaman (default 20, maks 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "tanggal, awali - untuk DESC",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/keahlian": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Daftar keahlian (publik, dipakai form signup)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Halaman (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Jumlah per halaman (default 20, maks 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "nama_keahlian | created_at, awali - untuk DESC",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cari nama keahlian",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Tambah keahlian (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data keahlian",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/skill.SaveRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/keahlian/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Detail keahlian beserta jemaat pemiliknya (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID keahlian",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Ubah nama keahlian (Super Admin; keahlian sistem tidak bisa diubah)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID keahlian",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data keahlian",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/skill.SaveRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Hapus keahlian (soft delete; Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID keahlian",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/keahlian/{id}/jemaat": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Beri keahlian ke satu jemaat (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID keahlian",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Jemaat",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/skill.JemaatRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/keahlian/{id}/jemaat/{userId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Lepas keahlian dari satu jemaat (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID keahlian",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/kegiatan": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Daftar kegiatan (publik)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tanggal awal, contoh 2026-11-01",
+                        "name": "dari",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tanggal akhir, contoh 2026-11-30",
+                        "name": "sampai",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cari nama kegiatan",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Halaman (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Jumlah per halaman (default 20, maks 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "tanggal | nama_kegiatan | created_at, awali - untuk DESC",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Tambah kegiatan (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data kegiatan",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.KegiatanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/kegiatan/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Detail kegiatan (publik)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kegiatan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Ubah kegiatan (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kegiatan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data kegiatan",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.KegiatanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Hapus kegiatan (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kegiatan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/kegiatan/{id}/petugas": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Daftar petugas satu kegiatan (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kegiatan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Jemaat harus aktif dan punya keahlian itu (sudah diverifikasi). Bentrok waktu hanya jadi peringatan di field peringatan.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Tugaskan jemaat ke kegiatan (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kegiatan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Jemaat dan keahlian",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule.PenugasanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/kegiatan/{id}/petugas/{id_penjadwalan}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kegiatan"
+                ],
+                "summary": "Batalkan penugasan petugas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kegiatan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID penugasan",
+                        "name": "id_penjadwalan",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/komunitas": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Daftar komunitas (publik)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Halaman (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Jumlah per halaman (default 20, maks 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "nama_komunitas | created_at, awali - untuk DESC",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cari nama komunitas",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Tambah komunitas (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data komunitas",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/group.SaveRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/komunitas/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Detail komunitas beserta anggota (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID komunitas",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Ubah komunitas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID komunitas",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data komunitas",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/group.SaveRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Hapus komunitas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID komunitas",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/komunitas/{id}/anggota": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Tambah anggota komunitas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID komunitas",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Anggota",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/group.AnggotaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/komunitas/{id}/anggota/{userId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Keluarkan anggota dari komunitas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID komunitas",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "komunitas"
+                ],
+                "summary": "Jadikan / batalkan ketua komunitas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID komunitas",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status ketua",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/group.KetuaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/kuesioner": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kuesioner"
+                ],
+                "summary": "Daftar jadwal kuesioner evaluasi, terbaru di atas (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MINGGUAN | TAHUNAN",
+                        "name": "jenis",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "MINGGUAN: id_kegiatan wajib; jadwal kosong = dibuka saat kegiatan selesai (00:00 kalau jam selesai kosong), ditutup H+2 23.59. TAHUNAN: tahun dan jadwal wajib. Format jam: \"2026-11-01 10:30:00\".",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kuesioner"
+                ],
+                "summary": "Buat jadwal kuesioner evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data kuesioner",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation.KuesionerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/kuesioner/{id}/jadwal": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "status BUKA = buka sekarang, TUTUP = tutup sekarang. Atau isi dibuka_pada / ditutup_pada (\"2026-11-01 10:30:00\"); yang tidak dikirim tetap jam lama.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kuesioner"
+                ],
+                "summary": "Ubah jam buka/tutup kuesioner evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID kuesioner",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Jadwal baru",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation.JadwalKuesionerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pendaftaran": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Daftar pendaftaran (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Halaman (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Jumlah per halaman (default 20, maks 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_at | status, awali - untuk DESC",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "MENUNGGU | DISETUJUI | DITOLAK | DUPLIKAT",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "JEMAAT_LAMA | BARU",
+                        "name": "jenis",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cari nama atau email",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pendaftaran/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Detail pendaftaran beserta isian lengkap (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pendaftaran",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pendaftaran/{id}/duplikat": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Tandai pendaftaran sebagai duplikat jemaat yang sudah ada (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pendaftaran",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Jemaat yang sudah ada",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pendaftaran.DuplikatRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pendaftaran/{id}/setujui": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "JEMAAT_LAMA: akun jemaat diaktifkan dengan password dari formulir. BARU: user dan profil dibuat, kode jemaat otomatis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Setujui pendaftaran (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pendaftaran",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Catatan",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/pendaftaran.SetujuiRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pendaftaran/{id}/tolak": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pendaftaran"
+                ],
+                "summary": "Tolak pendaftaran (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pendaftaran",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Alasan penolakan",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pendaftaran.TolakRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Daftar pertanyaan evaluasi (Majelis, Super Admin)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MINGGUAN | TAHUNAN",
+                        "name": "jenis",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "true = hanya yang aktif, false = hanya yang nonaktif",
+                        "name": "aktif",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Tambah pertanyaan evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data pertanyaan",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation.PertanyaanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan/gform": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Samakan pertanyaan aktif ke Google Form (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MINGGUAN | TAHUNAN",
+                        "name": "jenis",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan/header": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Template header form evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MINGGUAN | TAHUNAN",
+                        "name": "jenis",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Ubah header form evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data header form",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation.UpdateHeaderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan/import": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Ganti set pertanyaan untuk jenis yang ada di file: pertanyaan sama dipakai ulang, yang baru dibuat, yang tidak ada di file dinonaktifkan. Semua atau tidak sama sekali.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Simpan import pertanyaan dari template Excel (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Template pertanyaan (.xlsx), maks 5 MB",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan/import/preview": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Cek isi sheet \"Pertanyaan\" per baris dan tunjukkan pertanyaan yang BARU, SAMA (dipakai ulang), dan yang akan dinonaktifkan. Tidak menyimpan data.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Preview import pertanyaan dari template Excel (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Template pertanyaan (.xlsx), maks 5 MB",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Detail pertanyaan beserta opsi (Majelis, Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pertanyaan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Ubah pertanyaan evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pertanyaan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data pertanyaan",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation.PertanyaanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Hapus pertanyaan evaluasi (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pertanyaan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/pertanyaan/{id}/aktif": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pertanyaan"
+                ],
+                "summary": "Aktifkan / nonaktifkan pertanyaan (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID pertanyaan",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status aktif",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation.AktifRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/import": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedule"
+                ],
+                "summary": "Simpan import jadwal kegiatan (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Template Excel (.xlsx), maks 5 MB",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedules/import/preview": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Memvalidasi file per baris dan mendeteksi bentrok waktu. Tidak menyimpan data.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedule"
+                ],
+                "summary": "Preview import jadwal dari template Excel",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Template Excel (.xlsx), maks 5 MB",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Daftar user (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Halaman (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Jumlah per halaman (default 20, maks 100)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "nama | kode_jemaat | created_at, awali - untuk DESC",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cari nama, kode jemaat, atau email",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter role",
+                        "name": "role",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Daftarkan akun jemaat (Super Admin)",
+                "parameters": [
+                    {
+                        "description": "Data user",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Detail user (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/keahlian": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Keahlian milik satu jemaat (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "keahlian"
+                ],
+                "summary": "Ganti seluruh keahlian satu jemaat (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Daftar id keahlian (kosong = lepas semua)",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/skill.ReplaceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/password": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Atur password user dan cabut semua sesinya (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Password baru",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.PasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/role": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Ubah role user (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Role baru",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RoleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/status": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Aktifkan / nonaktifkan akun (Super Admin)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.StatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Body"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "auth.LoginRequest": {
+            "type": "object",
+            "required": [
+                "identifier",
+                "password"
+            ],
+            "properties": {
+                "identifier": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 72
+                }
+            }
+        },
+        "auth.RefreshRequest": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "debuginfo.Catatan": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "queries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/debuginfo.Query"
+                    }
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "debuginfo.Query": {
+            "type": "object",
+            "properties": {
+                "durasi_ms": {
+                    "type": "number"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "rows": {
+                    "type": "integer"
+                },
+                "sql": {
+                    "type": "string"
+                }
+            }
+        },
+        "evaluation.AktifRequest": {
+            "type": "object",
+            "required": [
+                "is_aktif"
+            ],
+            "properties": {
+                "is_aktif": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "evaluation.JadwalKuesionerRequest": {
+            "type": "object",
+            "properties": {
+                "dibuka_pada": {
+                    "type": "string"
+                },
+                "ditutup_pada": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "BUKA",
+                        "TUTUP"
+                    ]
+                }
+            }
+        },
+        "evaluation.KuesionerRequest": {
+            "type": "object",
+            "required": [
+                "jenis_kuesioner"
+            ],
+            "properties": {
+                "dibuka_pada": {
+                    "description": "kosong (MINGGUAN) = saat kegiatan selesai",
+                    "type": "string"
+                },
+                "ditutup_pada": {
+                    "description": "kosong (MINGGUAN) = H+N pukul 23.59",
+                    "type": "string"
+                },
+                "id_kegiatan": {
+                    "type": "integer"
+                },
+                "jenis_kuesioner": {
+                    "type": "string",
+                    "enum": [
+                        "MINGGUAN",
+                        "TAHUNAN"
+                    ]
+                },
+                "tahun": {
+                    "type": "integer",
+                    "maximum": 2100,
+                    "minimum": 2000
+                }
+            }
+        },
+        "evaluation.PertanyaanRequest": {
+            "type": "object",
+            "required": [
+                "jenis_kuesioner",
+                "teks_pertanyaan",
+                "tipe_jawaban"
+            ],
+            "properties": {
+                "jenis_kuesioner": {
+                    "type": "string",
+                    "enum": [
+                        "MINGGUAN",
+                        "TAHUNAN"
+                    ]
+                },
+                "opsi": {
+                    "description": "dive ini untuk validasi item di dalam array",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "teks_pertanyaan": {
+                    "type": "string"
+                },
+                "tipe_jawaban": {
+                    "type": "string",
+                    "enum": [
+                        "RATING",
+                        "TEKS_SINGKAT",
+                        "PILIHAN_GANDA",
+                        "CENTANG",
+                        "DROPDOWN",
+                        "PARAGRAF"
+                    ]
+                },
+                "urutan": {
+                    "description": "Urutan minimal dari 1",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "wajib": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "evaluation.UpdateHeaderRequest": {
+            "type": "object",
+            "required": [
+                "jenis_kuesioner",
+                "judul"
+            ],
+            "properties": {
+                "deskripsi": {
+                    "type": "string"
+                },
+                "jenis_kuesioner": {
+                    "type": "string"
+                },
+                "judul": {
+                    "type": "string"
+                }
+            }
+        },
+        "group.AnggotaRequest": {
+            "type": "object",
+            "required": [
+                "id_user"
+            ],
+            "properties": {
+                "id_user": {
+                    "type": "integer"
+                },
+                "is_ketua": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "group.KetuaRequest": {
+            "type": "object",
+            "required": [
+                "is_ketua"
+            ],
+            "properties": {
+                "is_ketua": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "group.SaveRequest": {
+            "type": "object",
+            "required": [
+                "nama"
+            ],
+            "properties": {
+                "deskripsi": {
+                    "type": "string",
+                    "maxLength": 1000
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
+        "pendaftaran.DaftarRequest": {
+            "type": "object",
+            "required": [
+                "nama",
+                "persetujuan_data"
+            ],
+            "properties": {
+                "alamat": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "data_tambahan": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "gereja_asal": {
+                    "description": "jika pindahan (atestasi)",
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "gereja_baptis": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "gereja_sidi": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "enum": [
+                        "L",
+                        "P"
+                    ]
+                },
+                "keahlian": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "kota": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama_ayah": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama_ibu": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama_panggilan": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "no_telepon": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 72,
+                    "minLength": 8
+                },
+                "pekerjaan": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "pendidikan_terakhir": {
+                    "type": "string",
+                    "enum": [
+                        "SD",
+                        "SMP",
+                        "SMA",
+                        "D3",
+                        "S1",
+                        "S2",
+                        "S3"
+                    ]
+                },
+                "persetujuan_data": {
+                    "type": "boolean"
+                },
+                "status_keanggotaan": {
+                    "type": "string",
+                    "enum": [
+                        "SIMPATISAN",
+                        "ANGGOTA_BAPTIS",
+                        "ANGGOTA_SIDI"
+                    ]
+                },
+                "status_pernikahan": {
+                    "type": "string",
+                    "enum": [
+                        "BELUM_KAWIN",
+                        "KAWIN",
+                        "CERAI_HIDUP",
+                        "CERAI_MATI"
+                    ]
+                },
+                "tanggal_baptis": {
+                    "type": "string"
+                },
+                "tanggal_lahir": {
+                    "type": "string"
+                },
+                "tanggal_pernikahan": {
+                    "type": "string"
+                },
+                "tanggal_sidi": {
+                    "type": "string"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
+        "pendaftaran.DuplikatRequest": {
+            "type": "object",
+            "required": [
+                "id_user"
+            ],
+            "properties": {
+                "catatan_admin": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "id_user": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pendaftaran.SetujuiRequest": {
+            "type": "object",
+            "properties": {
+                "catatan_admin": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "pendaftaran.SignupRequest": {
+            "type": "object",
+            "required": [
+                "nama",
+                "password",
+                "persetujuan_data"
+            ],
+            "properties": {
+                "alamat": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "data_tambahan": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "gereja_asal": {
+                    "description": "jika pindahan (atestasi)",
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "gereja_baptis": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "gereja_sidi": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "enum": [
+                        "L",
+                        "P"
+                    ]
+                },
+                "keahlian": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "kode_jemaat": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "kota": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama_ayah": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama_ibu": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "nama_panggilan": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "no_telepon": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 72,
+                    "minLength": 8
+                },
+                "pekerjaan": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "pendidikan_terakhir": {
+                    "type": "string",
+                    "enum": [
+                        "SD",
+                        "SMP",
+                        "SMA",
+                        "D3",
+                        "S1",
+                        "S2",
+                        "S3"
+                    ]
+                },
+                "persetujuan_data": {
+                    "description": "consent UU PDP, harus true",
+                    "type": "boolean"
+                },
+                "status_keanggotaan": {
+                    "type": "string",
+                    "enum": [
+                        "SIMPATISAN",
+                        "ANGGOTA_BAPTIS",
+                        "ANGGOTA_SIDI"
+                    ]
+                },
+                "status_pernikahan": {
+                    "type": "string",
+                    "enum": [
+                        "BELUM_KAWIN",
+                        "KAWIN",
+                        "CERAI_HIDUP",
+                        "CERAI_MATI"
+                    ]
+                },
+                "tanggal_baptis": {
+                    "type": "string"
+                },
+                "tanggal_lahir": {
+                    "type": "string"
+                },
+                "tanggal_pernikahan": {
+                    "type": "string"
+                },
+                "tanggal_sidi": {
+                    "type": "string"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
+        "pendaftaran.TolakRequest": {
+            "type": "object",
+            "required": [
+                "catatan_admin"
+            ],
+            "properties": {
+                "catatan_admin": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "response.Body": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "debug": {
+                    "$ref": "#/definitions/debuginfo.Catatan"
+                },
+                "errors": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "schedule.KegiatanRequest": {
+            "type": "object",
+            "required": [
+                "nama_kegiatan",
+                "tanggal",
+                "waktu_mulai"
+            ],
+            "properties": {
+                "deskripsi": {
+                    "type": "string"
+                },
+                "id_komunitas": {
+                    "description": "kosong = kegiatan umum",
+                    "type": "integer"
+                },
+                "lokasi": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "nama_kegiatan": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "nats_alkitab": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "pembicara": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "perlu_evaluasi": {
+                    "type": "boolean"
+                },
+                "tanggal": {
+                    "description": "contoh \"2026-11-01\"",
+                    "type": "string"
+                },
+                "tema": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "waktu_mulai": {
+                    "description": "contoh \"07:00\"",
+                    "type": "string"
+                },
+                "waktu_selesai": {
+                    "description": "boleh kosong",
+                    "type": "string"
+                }
+            }
+        },
+        "schedule.PenugasanRequest": {
+            "type": "object",
+            "required": [
+                "id_keahlian",
+                "id_user"
+            ],
+            "properties": {
+                "id_keahlian": {
+                    "type": "integer"
+                },
+                "id_user": {
+                    "type": "integer"
+                }
+            }
+        },
+        "skill.JemaatRequest": {
+            "type": "object",
+            "required": [
+                "id_user"
+            ],
+            "properties": {
+                "id_user": {
+                    "type": "integer"
+                }
+            }
+        },
+        "skill.ReplaceRequest": {
+            "type": "object",
+            "required": [
+                "id_keahlian"
+            ],
+            "properties": {
+                "id_keahlian": {
+                    "type": "array",
+                    "maxItems": 50,
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "skill.SaveRequest": {
+            "type": "object",
+            "required": [
+                "nama"
+            ],
+            "properties": {
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
+        "user.CreateRequest": {
+            "type": "object",
+            "required": [
+                "kode_jemaat",
+                "nama",
+                "role"
+            ],
+            "properties": {
+                "alamat": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "enum": [
+                        "L",
+                        "P"
+                    ]
+                },
+                "kode_jemaat": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "no_telepon": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 72,
+                    "minLength": 8
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "Jemaat",
+                        "Majelis",
+                        "Super Admin"
+                    ]
+                },
+                "tanggal_lahir": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.PasswordRequest": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "maxLength": 72,
+                    "minLength": 8
+                }
+            }
+        },
+        "user.RoleRequest": {
+            "type": "object",
+            "required": [
+                "role"
+            ],
+            "properties": {
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "Jemaat",
+                        "Majelis",
+                        "Super Admin"
+                    ]
+                }
+            }
+        },
+        "user.StatusRequest": {
+            "type": "object",
+            "required": [
+                "is_aktif"
+            ],
+            "properties": {
+                "is_aktif": {
+                    "type": "boolean"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Isi dengan: Bearer \u003caccess_token\u003e",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
